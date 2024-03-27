@@ -1,30 +1,101 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <stdio.h>
+#include <ctype.h>
 #include "not_formal.h"
 
+char readed_charater;
 
-
-bool IS_NUMBER (char *str) {
-    for (int i=0; i<strlen(str); i++)
-        if (!IS_DIGIT(*(str+i))) return false;
-    return true;
+void clear_buffer () {
+    int c = 0;
+    while (c != '\n' && c != EOF) 
+        c = getchar();
 }
 
-bool IS_EXPRESSION(char *str) {
-    return true;
+char get_character () {
+    while ( isblank(readed_charater = getchar()) );
+    return readed_charater;
 }
 
-bool IS_FACTOR (char *str) {
-    if ( IS_NUMBER(str) ) return true;
-    int str_len = strlen(str);
-    char first_character = *str;
-    char last_character = *(str+str_len-1);
-    if (!IS_START_FACTOR(first_character)) return false;
-    if (!IS_END_FACTOR(last_character)) return false;
-    char *expression_str = malloc(sizeof(char)*str_len-2);
-    int j=0;
-    for (int i=1; i<str_len-1; i++ ) 
-        *(expression_str+j++) = *(str+i); 
-    return IS_EXPRESSION(expression_str);
+void print_error_message (char *str) {
+    printf("la syntaxe de l’expression est erronée: %s\n", str);
+}
+
+void print_result (int value) {
+    printf(
+        "la syntaxe de l’expression est correcte"
+        "\nsa valeur est %d\n",
+        value);
+} 
+
+void parser () {
+    get_character();
+    int value = expression();
+    if ( is_termination_character(readed_charater) )
+        print_result(value);
+    else 
+        print_error_message("symbole terminal non reconu");
+    
+}
+
+int expression () {
+    int value = term();
+    char operator;
+    while ( is_additive_operator((operator = readed_charater)) ) {
+        get_character();
+        switch (operator) {
+            case '+':
+                value+=term();
+                break;
+            case '-':
+                value-=term();
+                break;
+            default:
+                break;
+        }
+    }
+    return value;
+}
+
+int term () {
+    int value = factor();
+    char operator;
+    while ( is_multiplicative_operator( (operator = readed_charater) ) ) {
+        get_character();
+        switch (operator) {
+            case '*':
+                value*=factor();
+                break;
+            case '/':
+                value/=factor();
+                break;
+            default:
+                break;
+        }
+    }
+    return value;
+}
+
+int factor () {
+    int value;
+    if ( is_digit(readed_charater) ){
+        value = number();
+    }else if ( is_start_factor(readed_charater) ) {
+        get_character();
+        value = expression();
+        if ( is_end_factor(readed_charater) )
+            get_character();
+        else
+            print_error_message("parenthse non fermé");
+    }
+    return value;
+}
+
+int number () {
+    char str_number[50]={'0'};
+    int i=0;
+    while ( is_digit(readed_charater) ) {
+        str_number[i++] = readed_charater;
+        get_character();
+    }
+    return atoi(str_number);
 }
