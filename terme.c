@@ -72,7 +72,7 @@ factor_terme string_factor_terme_mapping (char *str) {
             factor_terme.terme = &terme;
             factor_terme.terme->factor_terme.multiplicative_operator = '\0';
             factor_terme.terme->factor_terme.terme = NULL;
-            factor_terme.terme->factor_terme.terme. = '\0';
+            factor_terme.terme->factor_terme.terme.multiplicative_operator = '\0';
         }
     }
     return factor_terme;
