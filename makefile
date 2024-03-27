@@ -1,3 +1,3 @@
 app: app.c
-	clear && gcc app.c  -o out
+	clear && gcc app.c terme.c  -o out
 	./out
