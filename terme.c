@@ -6,36 +6,6 @@
 #include "not_formal.h"
 
 
-/** A SORTIR */
-
-bool IS_NUMBER (char *str) {
-    for (int i=0; i<strlen(str); i++)
-        if (!IS_DIGIT(*(str+i))) return false;
-    return true;
-}
-
-
-bool IS_EXPRESSION(char *str) {
-    return true;
-}
-
-bool IS_FACTOR (char *str) {
-    if ( IS_NUMBER(str) ) return true;
-    int str_len = strlen(str);
-    char first_character = *str;
-    char last_character = *(str+str_len-1);
-    if (!IS_START_FACTOR(first_character)) return false;
-    if (!IS_END_FACTOR(last_character)) return false;
-    char *expression_str = malloc(sizeof(char)*str_len-2);
-    int j=0;
-    for (int i=1; i<str_len-1; i++ ) 
-        *(expression_str+j++) = *(str+i); 
-    return IS_EXPRESSION(expression_str);
-}
-
-/*---------------------------*/
-
-
 void printTerme (terme t, int id) {
     if (id == 1) {
         // printf("\n");
@@ -69,10 +39,8 @@ factor_terme string_factor_terme_mapping (char *str) {
         buffer[j++] = str[i];
         if (is_get_factor && i == str_len -1 ) {
             terme terme = string_terme_mapping(buffer);
-            factor_terme.terme = &terme;
-            factor_terme.terme->factor_terme.multiplicative_operator = '\0';
+            factor_terme.terme = &terme;              
             factor_terme.terme->factor_terme.terme = NULL;
-            factor_terme.terme->factor_terme.terme.multiplicative_operator = '\0';
         }
     }
     return factor_terme;
