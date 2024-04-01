@@ -11,9 +11,8 @@ void clear_buffer () {
         c = getchar();
 }
 
-char get_character () {
+void read_next_character () {
     while ( isblank(readed_charater = getchar()) );
-    return readed_charater;
 }
 
 void print_error_message (char *str) {
@@ -27,21 +26,23 @@ void print_result (int value) {
         value);
 } 
 
+/*
+    [TODO COMMENT THE PROJECT]
+*/
 void parser () {
-    get_character();
+    read_next_character();
     int value = expression();
     if ( is_termination_character(readed_charater) )
         print_result(value);
     else 
         print_error_message("symbole terminal non reconu");
-    
 }
 
 int expression () {
     int value = term();
     char operator;
     while ( is_additive_operator((operator = readed_charater)) ) {
-        get_character();
+        read_next_character();
         switch (operator) {
             case '+':
                 value+=term();
@@ -60,7 +61,7 @@ int term () {
     int value = factor();
     char operator;
     while ( is_multiplicative_operator( (operator = readed_charater) ) ) {
-        get_character();
+        read_next_character();
         switch (operator) {
             case '*':
                 value*=factor();
@@ -80,22 +81,23 @@ int factor () {
     if ( is_digit(readed_charater) ){
         value = number();
     }else if ( is_start_factor(readed_charater) ) {
-        get_character();
+        read_next_character();
         value = expression();
         if ( is_end_factor(readed_charater) )
-            get_character();
+            read_next_character();
         else
             print_error_message("parenthse non fermé");
     }
     return value;
 }
 
+
 int number () {
     char str_number[50]={'0'};
     int i=0;
     while ( is_digit(readed_charater) ) {
         str_number[i++] = readed_charater;
-        get_character();
+        read_next_character();
     }
     return atoi(str_number);
 }
