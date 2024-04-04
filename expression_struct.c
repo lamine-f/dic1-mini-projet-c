@@ -1,64 +1,55 @@
 #include "not_formal.h"
 
-Expression_tree *create_expression_tree () {
-    Expression_tree *exp_tree = malloc(sizeof(*exp_tree));
-    exp_tree->right_expression_tree = NULL;
-    exp_tree->parent_expression_tree = NULL;
-    exp_tree->left_value = -1;
-    return exp_tree;
+int evaluate_expression (Expression_stack *exp_stack) {
+    Expression_stack *current = exp_stack;
+    int previous_value = 0;
+    int value = current->value;
+    while ( !is_empty_expression_stack(current) ) {
+        int current_value = current->value;
+        switch (current->operator) {
+            case '+':
+                value = current_value + previous_value;
+                break;
+            case '-':
+                value = current_value - previous_value;
+                break;
+            default:
+                break;
+        }
+        previous_value = value;
+        current = current->next_expression;
+    }
+    return value;
 }
 
-Expression_tree *set_expression_tree_value(Expression_tree *exp_tree, int value) {
-    if (is_empty_expression_tree(exp_tree)) {
-        exp_tree = malloc(sizeof(*exp_tree));    
-    }
-    exp_tree->left_value = value;
-    return exp_tree;    
+Expression_stack *clear_expression_stack (Expression_stack *exp_stack) {
+    if (is_empty_expression_stack(exp_stack) )
+        return NULL;
+    Expression_stack *next_exp_stack = exp_stack->next_expression;
+    free(exp_stack);
+    return clear_expression_stack(next_exp_stack);
 }
 
-Expression_tree *set_expression_tree_operator(Expression_tree *exp_tree, char operator) {
-    if (is_empty_expression_tree(exp_tree)) exp_tree = malloc(sizeof(*exp_tree));
-    exp_tree->operator = operator;
-    return exp_tree;    
+Expression_stack *create_expression_stack () {
+    return NULL;
 }
 
-Expression_tree *create_right_expression_tree(Expression_tree *exp_tree) {
-    if (exp_tree->right_expression_tree == NULL) {
-        exp_tree->right_expression_tree = malloc(sizeof(*exp_tree));
-        exp_tree->right_expression_tree->parent_expression_tree = exp_tree;
-    }else {
-        printf("DEV: RIGHT EXPRESSION ALREADY EXIST\n");
-    }
-    return exp_tree;    
+int is_empty_expression_stack (Expression_stack *exp_stack) {
+    return (exp_stack == NULL);
 }
 
-Expression_tree *add_new_right_expression_tree(Expression_tree *exp_tree_dest, Expression_tree *exp_tree) {
-    if ( exp_tree_dest->right_expression_tree != NULL ) {
-        printf("DEV: RIGHT EXPRESSION ALREADY EXIST\n");
-    }else {
-        exp_tree_dest->right_expression_tree = exp_tree;
-        exp_tree_dest->right_expression_tree->parent_expression_tree = exp_tree_dest;
-    }
-    return exp_tree_dest; 
+Expression_stack *add_expression(Expression_stack *exp_stack, char operator, int value) {
+    Expression_stack *new_exp_stack = malloc(sizeof(*new_exp_stack));
+    new_exp_stack->operator = operator;
+    new_exp_stack->value = value;
+    new_exp_stack->next_expression = exp_stack;
+    return new_exp_stack;
 }
 
-void print_expression_tree(Expression_tree *exp_tree) {
-    Expression_tree *current = exp_tree;
-    if ( is_empty_expression_tree(current) ) {
-        return;
+void print_expression_stack(Expression_stack *exp_stack) {
+    Expression_stack *current = exp_stack;
+    while ( !is_empty_expression_stack(current) ) {
+        printf(" Value: %d , Opé: %c \n", current->value, current->operator );
+        current = current->next_expression;
     }
-
-    if ( !is_empty_expression_tree(current->parent_expression_tree) ) {
-        printf("(%d) -> %c(%d)\n", current->parent_expression_tree->left_value, current->operator, current->left_value);
-    }else {
-        printf("%c(%d)\n", current->operator, current->left_value);
-    }
-
-    if ( !is_empty_expression_tree(current->right_expression_tree) ) {
-        print_expression_tree(current->right_expression_tree);
-    }
-}
-
-int is_empty_expression_tree (Expression_tree *exp_tree) {
-    return (exp_tree == NULL);
 }

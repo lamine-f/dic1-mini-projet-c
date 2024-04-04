@@ -1,107 +1,58 @@
 #include "not_formal.h"
+#include "session.h"
 
-int evaluate_term (Term_stack *term_stack, int acc) {
-    if ( is_term_stack_empty(term_stack) ) {
-        return acc;
+int evaluate_term ( Term_stack *term_stack ) {
+    Term_stack *current = term_stack;
+    int previous_value = 1;
+    int value = current->value;
+    while ( !is_empty_term_stack(current) ) {
+        int current_value = current->value;
+        switch (current->operator) {
+            case '*':
+                value = current_value * previous_value;
+                break;
+            case '/':
+                if (previous_value == 0) abort_process(-2, "division par zéro");
+                value = current_value / previous_value;
+                break;
+            default:
+                break;
+        }
+        previous_value = value;
+        current = current->next_term;
     }
-
-
-    switch (term_stack->operator) {
-        case '*' :
-            /* code */
-            printf("cc %d \n", acc * term_stack->value);
-            return evaluate_term(term_stack->next_term, acc*term_stack->value);
-            break;
-        
-        case '/' :
-            /* code */
-            return evaluate_term(term_stack->next_term, acc/term_stack->value);
-            break;
-        
-
-        default:
-            break;
-    }
-
-
-    // if ( !is_term_stack_empty(current->previous_term) ) {
-        
-    //     printf("(%d) -> (%d)\n", current->previous_term->value, current->value);
-    // }else {
-    //     printf("(%d)\n", current->value);
-    // }
-
-    // if ( !is_term_stack_empty(current->next_term) ) {
-    //     print_term_stack(current->next_term);
-    // }
-
+    return value;
 }
 
 Term_stack *create_term_stack() {
     return NULL;
 }
 
-Term_stack *set_term_stack_value(Term_stack *term_stack, int value) {
-    if (is_term_stack_empty(term_stack)) {
-        term_stack = malloc(sizeof(*term_stack));    
-    }
-    term_stack->value = value;
-    return term_stack; 
-}
-
-Term_stack *set_term_stack_operator(Term_stack *term_stack, char operator) {
-    if (is_term_stack_empty(term_stack)) {
-        term_stack = malloc(sizeof(*term_stack));    
-    }
-    term_stack->operator = operator;
-    return term_stack; 
-}
-
-Term_stack *create_next_term(Term_stack *term_stack) {
-    if (term_stack->next_term == NULL) {
-        term_stack->next_term = malloc(sizeof(*term_stack));
-        term_stack->next_term->previous_term = term_stack;
-    }else {
-        printf("DEV: RIGHT EXPRESSION ALREADY EXIST\n");
-    }
-    return term_stack;  
-}
-
-Term_stack *add_new_next_term(Term_stack *term_stack_dest, char operator, int value) {
-
-    Term_stack *t_s = malloc(sizeof(*t_s));
-    // term_stack_dest->previous_term = t_s;
-
-    if ( !is_term_stack_empty(term_stack_dest) ) {
-        term_stack_dest->previous_term = t_s;
-    }
-
-    t_s->next_term=term_stack_dest;
-    t_s->operator = operator;
-    t_s->value = value;
-    t_s->previous_term = NULL;
-
-    return t_s;
-}
-
-void print_term_stack(Term_stack *term_stack) {
-    Term_stack *current = term_stack;
-    
-    while ( !is_term_stack_empty(current) ) {
-        printf(" Value: %d , Opé: %c \n", current->value, current->operator );
-        current = current->next_term;
-    }
-    
-}
-
-int is_term_stack_empty (Term_stack *term_stack) {
+int is_empty_term_stack (Term_stack *term_stack) {
     return (term_stack == NULL);
 }
 
 Term_stack *clear_term_stack (Term_stack *term_stack) {
     Term_stack *s_t;
-    if ( is_term_stack_empty(s_t) ) return NULL;
+    if ( is_empty_term_stack(s_t) ) return NULL;
     s_t = term_stack->next_term;
     free(term_stack);
-    return clear_term_stack(s_t);    
+    return clear_term_stack(s_t);
 }
+
+Term_stack *add_term(Term_stack *term_stack, char operator, int value) {
+    Term_stack *t_s = malloc(sizeof(*t_s));
+    t_s->next_term=term_stack;
+    t_s->operator = operator;
+    t_s->value = value;
+    return t_s;
+}
+
+void print_term_stack(Term_stack *term_stack) {
+    Term_stack *current = term_stack;
+    while ( !is_empty_term_stack(current) ) {
+        printf(" Value: %d , Opé: %c \n", current->value, current->operator );
+        current = current->next_term;
+    }
+}
+

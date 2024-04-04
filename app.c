@@ -1,19 +1,8 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
+#include "session.h"
 #include "not_formal.h"
 
-void arithmetic_resolver () {
-
-}
 
 int main() {
-
-    while (true)
-    {
-        printf("A toi :");
-        parser();
-        clear_buffer();
-    }
+    arithmetic_resolver();
     return 0;
 }

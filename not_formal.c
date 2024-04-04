@@ -1,97 +1,87 @@
+#include "utils.h"
+#include "session.h"
 #include "not_formal.h"
 
-char readed_charater;
-
-void clear_buffer () {
-    int c = 0;
-    while (c != '\n' && c != EOF) 
-        c = getchar();
-}
-
-void read_next_character () {
-    while ( isblank(readed_charater = getchar()) );
-}
-
-void print_error_message (char *str) {
-    printf("la syntaxe de l’expression est erronée: %s\n", str);
-}
-
-void print_result (int value) {
-    printf(
-        "la syntaxe de l’expression est correcte"
-        "\nsa valeur est %d\n",
-        value);
-} 
+#define is_blank_character(c) ((c == ' ') || (c == ' '))
+#define is_multiplicative_operator(c) ((c == '*') || (c == '/'))
+#define is_additive_operator(c) ((c == '+') || (c == '-'))
+#define is_digit(c) ( (c == '0') || (c == '1') || (c == '2') || (c == '3') || (c == '4') || (c == '5') || (c == '6') || (c == '7') || (c == '8') || (c == '9') )
+#define is_start_factor(c) ((c == '('))
+#define is_end_factor(c) ((c == ')'))
+#define is_termination_character(c) (( c == '='))
+#define is_stop_session_character(c) (( c == '.'))
 
 /*
-    [TODO COMMENT THE PROJECT]
+    TODO COMMENT THE PROJECT
 */
 
-Expression_tree expre;
-//2+2
+void arithmetic_resolver () {
+    start_session();
+}
+
 void parser () {
     read_next_character();
-    int expression_result = expression();
-    if ( is_termination_character(readed_charater) )
-        print_result(expression_result);
-    else 
-        print_error_message("symbole terminal non reconu");
+    if ( is_stop_session_character(read_character) ) {
+        stop_session();
+    }else {
+        int expression_result = expression();
+        if ( is_termination_character(read_character) )
+            print_result(expression_result);
+        else {
+            abort_process(-1, "symbole terminal non reconu");
+        }
+    }
 }
 
 int expression () {
     int term_result = term();
-    Expression_tree *exp_tree = create_expression_tree();    
-    Expression_tree *current = exp_tree;
-    while ( is_additive_operator((readed_charater)) ) {
-        set_expression_tree_operator(current, readed_charater);
-        set_expression_tree_value(current, term_result);
-        create_right_expression_tree(current);
-        read_next_character();
-        term_result = term();
-        current = current->right_expression_tree;
+    int result = term_result;
+    if ( ( is_additive_operator((read_character)) ) ) {
+        Expression_stack *exp_stack = create_expression_stack();
+        exp_stack = add_expression(exp_stack, read_character, term_result);
+        while ( is_additive_operator((read_character)) ) {
+            read_next_character();
+            term_result = term();
+            exp_stack = add_expression(exp_stack, read_character, term_result);
+        }
+        result = evaluate_expression(exp_stack);
+        clear_expression_stack(exp_stack);
     }
-
-
-    //process
-    printf("EXPRESSIONS \n");
-    print_expression_tree(exp_tree);
-
-    return 0;
+    return result;
 }
 
 int term () {
     int factor_result = factor();
-    Term_stack *term_stack = create_term_stack();
-    while ( is_multiplicative_operator( (readed_charater) ) ) {
-        term_stack = add_new_next_term(term_stack, readed_charater, factor_result);
-        printf("cc\n");
-        factor_result=factor();
-        // term_stack = add_new_next_term(term_stack, '-', factor_result);
+    int result = factor_result;
+    if ( is_multiplicative_operator( (read_character) ) ) {
+        Term_stack *term_stack = create_term_stack();
+        term_stack = add_term(term_stack, read_character, factor_result);
+        while ( is_multiplicative_operator( (read_character) ) ) {
+            read_next_character();
+            factor_result=factor();
+            term_stack = add_term(term_stack, read_character, factor_result);
+        }
+        result = evaluate_term(term_stack);
+        clear_term_stack(term_stack);
     }
-
-    printf("TERMS \n");
-    // print_term_stack(term_stack);
-    // int res = evaluate_term(term_stack, 1);
-    //proccess
-
-    // printf("RES: %d\n", res);
-
-    // clear_term_stack(term_stack);
-
-    return 0;
+     return result;
 }
 
 int factor () {
     int result;
-    if ( is_digit(readed_charater) ){
+    if ( is_digit(read_character) ){
         result = number();
-    }else if ( is_start_factor(readed_charater) ) {
+    }else if ( is_start_factor(read_character) ) {
         read_next_character();
         result = expression();
-        if ( is_end_factor(readed_charater) )
+        if ( is_end_factor(read_character) ) {
             read_next_character();
-        else
-            print_error_message("parenthse non fermé");
+        } else {
+            abort_process(-1, "parenthse non fermée");
+        }
+
+    }else {
+        abort_process(-1, "facteur incorrect");
     }
     return result;
 }
@@ -99,9 +89,10 @@ int factor () {
 int number () {
     char str_number[50]={'0'};
     int i=0;
-    while ( is_digit(readed_charater) ) {
-        str_number[i++] = readed_charater;
+    while ( is_digit(read_character) ) {
+        str_number[i++] = read_character;
         read_next_character();
     }
     return atoi(str_number);
 }
+
