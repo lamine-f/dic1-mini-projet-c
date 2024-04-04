@@ -1,6 +1,6 @@
-#include "utils.h"
-#include "session.h"
-#include "not_formal.h"
+#include "../include/utils.h"
+#include "../include/session.h"
+#include "../include/not_formal.h"
 
 #define is_blank_character(c) ((c == ' ') || (c == ' '))
 #define is_multiplicative_operator(c) ((c == '*') || (c == '/'))
@@ -10,10 +10,6 @@
 #define is_end_factor(c) ((c == ')'))
 #define is_termination_character(c) (( c == '='))
 #define is_stop_session_character(c) (( c == '.'))
-
-/*
-    TODO COMMENT THE PROJECT
-*/
 
 void arithmetic_resolver () {
     start_session();
@@ -88,11 +84,10 @@ int factor () {
 
 int number () {
     char str_number[50]={'0'};
-    int i=0;
+    int len=0;
     while ( is_digit(read_character) ) {
-        str_number[i++] = read_character;
+        str_number[len++] = read_character;
         read_next_character();
     }
-    return atoi(str_number);
+    return str_to_number(str_number, len);
 }
-

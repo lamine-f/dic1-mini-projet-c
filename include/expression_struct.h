@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 typedef struct Expression_stack {
     char operator;
     //-1: NULL VALUE

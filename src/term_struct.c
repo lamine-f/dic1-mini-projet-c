@@ -1,5 +1,5 @@
-#include "not_formal.h"
-#include "session.h"
+#include "../include/term_struct.h"
+#include "../include/session.h"
 
 int evaluate_term ( Term_stack *term_stack ) {
     Term_stack *current = term_stack;
@@ -55,4 +55,3 @@ void print_term_stack(Term_stack *term_stack) {
         current = current->next_term;
     }
 }
-
