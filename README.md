@@ -17,7 +17,7 @@ Le projet est organisé selon la structure suivante :
 Pour compiler le programme, vous pouvez utiliser un compilateur C tel que GCC en exécutant la commande suivante dans votre terminal :
 
 ```bash
-gcc -o bin/analyseur_syntaxique src/*.c -I includes
+gcc src/*.c -o bin/arithmetic-resolver
 ```
 Ou bien utiliser l'utilitaire make:
 
