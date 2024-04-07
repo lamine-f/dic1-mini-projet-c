@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "not_formal.h"
+#include "syntax_analysis_expression_evaluation.h"
 
-char readed_charater;
+char read_character;
 
 void clear_buffer () {
     int c = 0;
@@ -12,7 +12,7 @@ void clear_buffer () {
 }
 
 void read_next_character () {
-    while ( isblank(readed_charater = getchar()) );
+    while ( isblank(read_character = getchar()) );
 }
 
 void print_error_message (char *str) {
@@ -32,7 +32,7 @@ void print_result (int value) {
 void parser () {
     read_next_character();
     int value = expression();
-    if ( is_termination_character(readed_charater) )
+    if ( is_termination_character(read_character) )
         print_result(value);
     else 
         print_error_message("symbole terminal non reconu");
@@ -41,7 +41,7 @@ void parser () {
 int expression () {
     int value = term();
     char operator;
-    while ( is_additive_operator((operator = readed_charater)) ) {
+    while ( is_additive_operator((operator = read_character)) ) {
         read_next_character();
         switch (operator) {
             case '+':
@@ -60,7 +60,7 @@ int expression () {
 int term () {
     int value = factor();
     char operator;
-    while ( is_multiplicative_operator( (operator = readed_charater) ) ) {
+    while ( is_multiplicative_operator( (operator = read_character) ) ) {
         read_next_character();
         switch (operator) {
             case '*':
@@ -78,12 +78,12 @@ int term () {
 
 int factor () {
     int value;
-    if ( is_digit(readed_charater) ){
+    if ( is_digit(read_character) ){
         value = number();
-    }else if ( is_start_factor(readed_charater) ) {
+    }else if ( is_start_factor(read_character) ) {
         read_next_character();
         value = expression();
-        if ( is_end_factor(readed_charater) )
+        if ( is_end_factor(read_character) )
             read_next_character();
         else
             print_error_message("parenthse non fermé");
@@ -95,8 +95,8 @@ int factor () {
 int number () {
     char str_number[50]={'0'};
     int i=0;
-    while ( is_digit(readed_charater) ) {
-        str_number[i++] = readed_charater;
+    while ( is_digit(read_character) ) {
+        str_number[i++] = read_character;
         read_next_character();
     }
     return atoi(str_number);

@@ -1,5 +1,6 @@
+#IDES
 .vscode
-out
-
 .idea
+
+bin/*
 *.zip

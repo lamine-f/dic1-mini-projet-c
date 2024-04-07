@@ -1,14 +1,9 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <stdbool.h>
-#include "not_formal.h"
+#include "syntax_analysis_expression_evaluation.h"
 
-void arithmetic_resolver () {
-
-}
 
 int main() {
-
     while (true)
     {
         printf("A toi :");

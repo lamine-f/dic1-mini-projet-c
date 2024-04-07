@@ -1,3 +1,3 @@
-app: app.c
-	clear && gcc app.c not_formal.c -o out
-	./out
+app: main.c
+	clear && gcc main.c syntax_analysis_expression_evaluation.c -o bin/out
+	./bin/out
