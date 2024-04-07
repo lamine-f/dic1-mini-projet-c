@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 typedef struct Term_stack {
-    //-1: NULL VALUE
     int value;
     struct Term_stack *next_term;
     char operator;
