@@ -2,7 +2,6 @@
 #include <stdlib.h>
 typedef struct Expression_stack {
     char operator;
-    //-1: NULL VALUE
     int value;
     struct Expression_stack *next_expression;
 } Expression_stack;
