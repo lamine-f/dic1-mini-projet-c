@@ -1,5 +1,5 @@
 #include "../include/session.h"
-#include "../include/not_formal.h"
+#include "../include/syntax_analysis_expression_evaluation.h"
 #include "../include/utils.h"
 
 /*
@@ -17,15 +17,20 @@ bool SESSION = true;
 void start_session () {
     while (SESSION) {
         pid_t process_id = fork();
+        //[PERE] ERREUR
         if (process_id == -1) {
             //TODO: catch fork error
-        } else if (process_id == 0) {
+        }
+        //[FILS]
+        else if (process_id == 0) {
             while (true) {
                 printf("A toi :");
                 parser();
                 clear_buffer();
             }
-        }else {
+        }
+        //[PERE]
+        else {
             int status;
             waitpid(process_id, &status, 0);
             if (status == 0) {
