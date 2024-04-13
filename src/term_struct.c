@@ -1,5 +1,5 @@
-#include "../include/term_struct.h"
-#include "../include/session.h"
+#include "../includes/term_struct.h"
+#include "../includes/session.h"
 
 int evaluate_term ( Term_stack *term_stack ) {
     Term_stack *current = term_stack;

@@ -1,6 +1,6 @@
-#include "../include/session.h"
-#include "../include/syntax_analysis_expression_evaluation.h"
-#include "../include/utils.h"
+#include "../includes/session.h"
+#include "../includes/syntax_analysis_expression_evaluation.h"
+#include "../includes/utils.h"
 
 /*
 EXIT CODE
