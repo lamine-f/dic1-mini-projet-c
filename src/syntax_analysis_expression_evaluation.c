@@ -1,6 +1,6 @@
-#include "../include/utils.h"
-#include "../include/session.h"
-#include "../include/syntax_analysis_expression_evaluation.h"
+#include "../includes/utils.h"
+#include "../includes/session.h"
+#include "../includes/syntax_analysis_expression_evaluation.h"
 
 #define is_blank_character(c) ((c == ' ') || (c == ' '))
 #define is_multiplicative_operator(c) ((c == '*') || (c == '/'))
