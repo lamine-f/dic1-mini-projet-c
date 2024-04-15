@@ -1,6 +1,6 @@
 // term_struct.c
-#include "../includes/term_struct.h"
-#include "../includes/session.h"
+#include "../../includes/structs/term_struct.h"
+#include "../../includes/session.h"
 
 // Évalue un terme
 int evaluate_term ( Term_stack *term_stack ) {
@@ -52,13 +52,4 @@ Term_stack *add_term(Term_stack *term_stack, char operator, int value) {
     t_s->operator = operator; // Affecte l'opérateur au nouveau terme
     t_s->value = value; // Affecte la valeur au nouveau terme
     return t_s; // Retourne la nouvelle pile de termes
-}
-
-// Affiche la pile de termes
-void print_term_stack(Term_stack *term_stack) {
-    Term_stack *current = term_stack;
-    while ( !is_empty_term_stack(current) ) {
-        printf(" Value: %d , Opé: %c \n", current->value, current->operator ); // Affiche la valeur et l'opérateur du terme courant
-        current = current->next_term; // Passe au terme suivant
-    }
 }
