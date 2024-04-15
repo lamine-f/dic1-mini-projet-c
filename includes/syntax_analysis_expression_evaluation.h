@@ -1,15 +1,16 @@
+// syntax_analysis_expression_evaluation.h
 #ifndef SYNTAX_ANALYSIS_EXPRESSION_EVAL_H_INCLUDED
 #define SYNTAX_ANALYSIS_EXPRESSION_EVAL_H_INCLUDED
-#include <stdio.h>
 #include <stdbool.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include "term_struct.h"
-#include "expression_struct.h"
-void arithmetic_resolver ();
-void parser ();
-int expression ();
-int term ();
-int factor ();
-int number ();
+#include "structs/term_struct.h"
+#include "structs/expression_struct.h"
+
+// Prototypes des fonctions
+void arithmetic_resolver (); // Résout l'expression arithmétique
+void parser (); // Analyse l'expression
+int expression (); // Évalue une expression
+int term (); // Évalue un terme
+int factor (); // Évalue un facteur
+int number (); // Évalue un nombre
+
 #endif
