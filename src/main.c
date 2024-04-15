@@ -1,8 +1,10 @@
+// main.c
+#include "../includes/utils.h"
+#include "../includes/session.h"
 #include "../includes/syntax_analysis_expression_evaluation.h"
-/*
-    TODO COMMENT THE PROJECT
-*/
+
+// Fonction principale
 int main() {
-    arithmetic_resolver();
-    return 0;
+    arithmetic_resolver(); // Appelle la fonction qui résout une expression arithmétique
+    return 0; // Retourne 0 si le programme s'est exécuté correctement
 }
