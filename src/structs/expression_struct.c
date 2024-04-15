@@ -1,5 +1,5 @@
 // expression_struct.c
-#include "../includes/expression_struct.h"
+#include "../../includes/structs/expression_struct.h"
 
 // Évalue une expression
 int evaluate_expression (Expression_stack *exp_stack) {
@@ -50,13 +50,4 @@ Expression_stack *add_expression(Expression_stack *exp_stack, char operator, int
     new_exp_stack->value = value; // Affecte la valeur à la nouvelle expression
     new_exp_stack->next_expression = exp_stack; // Fait pointer la nouvelle expression vers l'expression précédente
     return new_exp_stack; // Retourne la nouvelle pile d'expressions
-}
-
-// Affiche la pile d'expressions
-void print_expression_stack(Expression_stack *exp_stack) {
-    Expression_stack *current = exp_stack;
-    while ( !is_empty_expression_stack(current) ) {
-        printf(" Value: %d , Opé: %c \n", current->value, current->operator ); // Affiche la valeur et l'opérateur de l'expression courante
-        current = current->next_expression; // Passe à l'expression suivante
-    }
 }

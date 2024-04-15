@@ -12,12 +12,12 @@ Le projet est organisé selon la structure suivante :
 - `src/`: Contient les fichiers sources du programme écrits en langage C.
 - `include/`: Contient les fichiers d'en-tête (`.h`) nécessaires pour déclarer les prototypes de fonctions et les structures de données.
 
-## Compilation et Exécution
+## Compilation et Exécution sous linux
 
 Pour compiler le programme, vous pouvez utiliser un compilateur C tel que GCC en exécutant la commande suivante dans votre terminal :
 
 ```bash
-gcc src/*.c -o bin/arithmetic-resolver
+gcc src/structs/*.c src/*.c -o bin/arithmetic-resolver
 ```
 Ou bien utiliser l'utilitaire make:
 

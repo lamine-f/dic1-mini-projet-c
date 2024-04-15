@@ -3,13 +3,12 @@
 #include "../includes/syntax_analysis_expression_evaluation.h"
 
 // Définition des macros pour simplifier le code
-#define is_blank_character(c) ((c == ' ') || (c == ' '))
 #define is_multiplicative_operator(c) ((c == '*') || (c == '/'))
 #define is_additive_operator(c) ((c == '+') || (c == '-'))
 #define is_digit(c) ( (c == '0') || (c == '1') || (c == '2') || (c == '3') || (c == '4') || (c == '5') || (c == '6') || (c == '7') || (c == '8') || (c == '9') )
 #define is_start_factor(c) ((c == '('))
 #define is_end_factor(c) ((c == ')'))
-#define is_termination_character(c) (( c == '='))
+#define is_expression_termination_character(c) (( c == '='))
 #define is_stop_session_character(c) (( c == '.'))
 
 // Résout une expression arithmétique
@@ -24,7 +23,7 @@ void parser () {
         stop_session(); // Si le caractère lu est un point, arrête la session
     }else {
         int expression_result = expression(); // Sinon, évalue l'expression
-        if ( is_termination_character(read_character) )
+        if ( is_expression_termination_character(read_character) )
             print_result(expression_result); // Si le caractère lu est un signe égal, imprime le résultat de l'expression
         else {
             abort_process(-1, "symbole terminal non reconnu"); // Sinon, termine le processus avec un message d'erreur
@@ -88,7 +87,7 @@ int factor () {
     return result; // Retourne le résultat du facteur
 }
 
-// Convertit une chaîne de caractères en nombre
+// Évalue un nombre
 int number () {
     char str_number[50]={'0'};
     int len=0;

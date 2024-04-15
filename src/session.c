@@ -4,12 +4,14 @@
 #include "../includes/utils.h"
 
 /*
-EXIT CODE
-    ERROR CODE
-        -1: Syntaxe incorrecte => 1++=
-        -2: Expression est 'incorrect' => 1/0=
+CODES
+    ERROR
+        -1: Syntaxe incorrecte
+            - (1++=)
+        -2: Expression est 'incorrect'
+            - (1/0=)
 
-    CODE
+    SUCCESS
          0: Fin de session
  */
 
@@ -19,11 +21,11 @@ bool SESSION = true; // Définition de la variable globale SESSION
 void start_session () {
     while (SESSION) {
         pid_t process_id = fork(); // Crée un nouveau processus
-        //[PERE] ERREUR
+        //[Executé par le "pére" en cas d"erreur lors de la création d'un nouveau processus]
         if (process_id == -1) {
             //TODO: catch fork error
         }
-            //[FILS]
+        //Executé par le processus "fils"
         else if (process_id == 0) {
             while (true) {
                 printf("A toi :");
@@ -31,7 +33,7 @@ void start_session () {
                 clear_buffer(); // Vide le buffer d'entrée
             }
         }
-            //[PERE]
+        //Executé par le processus "pére"
         else {
             int status;
             waitpid(process_id, &status, 0); // Attend la fin du processus fils
