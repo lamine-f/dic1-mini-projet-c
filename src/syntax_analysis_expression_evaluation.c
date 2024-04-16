@@ -82,7 +82,7 @@ int factor () {
         }
 
     }else {
-        abort_process(-1, "facteur incorrect"); // Si le caractère lu n'est ni un chiffre ni une parenthèse ouvrante, termine le processus avec un message d'erreur
+        abort_process(-1, "facteur non reconnu"); // Si le caractère lu n'est ni un chiffre ni une parenthèse ouvrante, termine le processus avec un message d'erreur
     }
     return result; // Retourne le résultat du facteur
 }
