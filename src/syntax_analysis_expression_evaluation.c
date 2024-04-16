@@ -25,7 +25,9 @@ void parser () {
         int expression_result = expression(); // Sinon, évalue l'expression
         if ( is_expression_termination_character(read_character) )
             print_result(expression_result); // Si le caractère lu est un signe égal, imprime le résultat de l'expression
-        else {
+        else if ( is_end_factor(read_character) ) {
+            abort_process(-1, "parenthèse non ouverte"); // Sinon, termine le processus avec un message d'erreur
+        }else {
             abort_process(-1, "symbole terminal non reconnu"); // Sinon, termine le processus avec un message d'erreur
         }
     }
