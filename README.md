@@ -10,7 +10,7 @@ Le projet est organisé selon la structure suivante :
 
 - `bin/`: Contient les exécutables générés après la compilation du programme.
 - `src/`: Contient les fichiers sources du programme écrits en langage C.
-- `include/`: Contient les fichiers d'en-tête (`.h`) nécessaires pour déclarer les prototypes de fonctions et les structures de données.
+- `includes/`: Contient les fichiers d'en-tête (`.h`) nécessaires pour déclarer les prototypes de fonctions et les structures de données.
 
 ## Compilation et Exécution sous linux
 
