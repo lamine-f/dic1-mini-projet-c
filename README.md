@@ -17,7 +17,8 @@ Le projet est organisé selon la structure suivante :
 Pour compiler le programme, vous pouvez utiliser un compilateur C tel que GCC en exécutant la commande suivante dans votre terminal :
 
 ```bash
-gcc src/structs/*.c src/*.c -o bin/arithmetic-resolver
+gcc src/*.c -o bin/arithmetic-resolver
+./bin/arithmetic-resolver
 ```
 Ou bien utiliser l'utilitaire make:
 

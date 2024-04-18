@@ -23,8 +23,14 @@ void parser () {
         stop_session(); // Si le caractère lu est un point, arrête la session
     }else {
         int expression_result = expression(); // Sinon, évalue l'expression
-        if ( is_expression_termination_character(read_character) )
-            print_result(expression_result); // Si le caractère lu est un signe égal, imprime le résultat de l'expression
+        if ( is_expression_termination_character(read_character) ) {
+            // Si le caractère lu est un signe égal
+            if ( getchar() == '\n' ) {
+                print_result(expression_result); // S'il n'y a pas de caractère aprés le signe égal, imprime le résultat de l'expression
+            }else {
+                abort_process(-1, "caractère trouvé aprés le caractère de terminaison"); // Sinon, termine le processus avec un message d'erreur
+            }
+        }
         else if ( is_end_factor(read_character) ) {
             abort_process(-1, "parenthèse non ouverte"); // Sinon, termine le processus avec un message d'erreur
         }else {
@@ -38,15 +44,19 @@ int expression () {
     int term_result = term(); // Évalue un terme
     int result = term_result;
     if ( ( is_additive_operator((read_character)) ) ) {
-        Expression_stack *exp_stack = create_expression_stack(); // Crée une pile d'expressions
-        exp_stack = add_expression(exp_stack, read_character, term_result); // Ajoute l'expression à la pile
-        while ( is_additive_operator((read_character)) ) {
-            read_next_character(); // Lit le prochain caractère non-blanc
-            term_result = term(); // Évalue un autre terme
-            exp_stack = add_expression(exp_stack, read_character, term_result); // Ajoute l'expression à la pile
+        char operator = read_character;
+        read_next_character(); // Lit le prochain caractère non-blanc
+        int value = expression();
+        switch (operator) {
+            case '+':
+                result += value; // Si l'opérateur est '+', ajoute la valeur à result
+                break;
+            case '-':
+                result -= value; // Si l'opérateur est '-', soustrait la valeur à result
+                break;
+            default:
+                break;
         }
-        result = evaluate_expression(exp_stack); // Évalue l'expression
-        clear_expression_stack(exp_stack); // Vide la pile d'expressions
     }
     return result; // Retourne le résultat de l'expression
 }
@@ -56,15 +66,20 @@ int term () {
     int factor_result = factor(); // Évalue un facteur
     int result = factor_result;
     if ( is_multiplicative_operator( (read_character) ) ) {
-        Term_stack *term_stack = create_term_stack(); // Crée une pile de termes
-        term_stack = add_term(term_stack, read_character, factor_result); // Ajoute le terme à la pile
-        while ( is_multiplicative_operator( (read_character) ) ) {
-            read_next_character(); // Lit le prochain caractère non-blanc
-            factor_result=factor(); // Évalue un autre facteur
-            term_stack = add_term(term_stack, read_character, factor_result); // Ajoute le terme à la pile
+        char operator = read_character;
+        read_next_character(); // Lit le prochain caractère non-blanc
+        int value = term();
+        switch (operator) {
+            case '*':
+                result *= value; // Si l'opérateur est '*', multiplie la valeur par result
+                break;
+            case '/':
+                if (value == 0) abort_process(-2, "division par zéro"); // Si la valeur est 0, arrête le processus avec un message d'erreur
+                result /= value; // Si l'opérateur est '/', divise result par la valeur
+                break;
+            default:
+                break;
         }
-        result = evaluate_term(term_stack); // Évalue le terme
-        clear_term_stack(term_stack); // Vide la pile de termes
     }
     return result; // Retourne le résultat du terme
 }
@@ -82,9 +97,8 @@ int factor () {
         } else {
             abort_process(-1, "parenthèse non fermée"); // Sinon, termine le processus avec un message d'erreur
         }
-
     }else {
-        abort_process(-1, "facteur non reconnu"); // Si le caractère lu n'est ni un chiffre ni une parenthèse ouvrante, termine le processus avec un message d'erreur
+        abort_process(-1, "symbole terminal non reconnu"); // Si le caractère lu n'est ni un chiffre ni une parenthèse ouvrante, termine le processus avec un message d'erreur
     }
     return result; // Retourne le résultat du facteur
 }

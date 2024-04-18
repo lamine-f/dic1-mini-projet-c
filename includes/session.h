@@ -2,6 +2,7 @@
 #ifndef SESSION_H_INCLUDED
 #define SESSION_H_INCLUDED
 #include <stdbool.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
 

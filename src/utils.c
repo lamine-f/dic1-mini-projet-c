@@ -17,7 +17,7 @@ void init_read_character() {
 
 // Lit le prochain caractère non-blanc
 void read_next_character () {
-    while ( isblank(read_character = getchar()) );
+    while ( ( (read_character = getchar()) == ' ' ) || ( read_character == '\n' ) || ( read_character == '\0' ) );
 }
 
 // Affiche un message d'erreur
